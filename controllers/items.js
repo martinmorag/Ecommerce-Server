@@ -159,6 +159,45 @@ const createItem = async (req, res) => {
   }
 };
 
+const editItem = async (req, res) => {
+  try {
+      if (!ObjectId.isValid(req.params.id)) {
+          return res.status(400).json({ message: 'You must use a valid item ID to update an item.' });
+      }
+
+      const itemId = new ObjectId(req.params.id);
+
+      // Prepare the updated item data from the request body
+      const updatedItem = {
+          name: req.body.name,
+          description: req.body.description,
+          price: parseFloat(req.body.price),
+          size: req.body.size,
+          images: req.body.images, // Assuming this is an array of strings (URLs)
+          storeId: parseInt(req.body.storeId),
+          storeName: req.body.storeName,
+          category: parseInt(req.body.category),
+          email: req.body.email
+      };
+
+      // Perform the update operation in MongoDB
+      const response = await mongodb.getDb().db().collection(collectionNameItems)
+          .updateOne(
+              { _id: itemId }, // Filter by item ID
+              { $set: updatedItem } // Update fields with new data
+          );
+
+      if (response.matchedCount > 0) {
+          res.status(200).json({ message: `Item with ID ${itemId} updated successfully` });
+      } else {
+          res.status(404).json({ message: `Item with ID ${itemId} not found` });
+      }
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+};
+
+
 const deleteItem = async (req, res) => {
   try {
     if (!ObjectId.isValid(req.params.id)) {
@@ -186,5 +225,6 @@ module.exports = {
     getItemComment,
     postItemComment,
     createItem,
+    editItem,
     deleteItem
 };

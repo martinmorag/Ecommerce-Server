@@ -11,6 +11,7 @@ router.post('/:id/rating', itemsController.postItemRating);
 router.get('/:id/comments', itemsController.getItemComment);
 router.post('/:id/comments', itemsController.postItemComment);
 router.post('/', itemsController.createItem);
+router.put('/:id', itemsController.editItem);
 router.delete('/:id', itemsController.deleteItem);
 
 module.exports = router;
