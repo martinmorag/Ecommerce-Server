@@ -16,8 +16,10 @@ app
     resave: false,
     saveUninitialized: true,
   }))
-  .use(cors({ methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH']}))
-  .use(cors({ origin: '*'}))
+  .use(cors({ 
+    origin: '*',
+    methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
+  }))
   .use('/', require('./routes'));
   
 
